@@ -20,7 +20,7 @@ class poker_deck():
         """
             returns card without replacement
         Returns:
-            _type_: _description_
+            string: card in the form of ranksuit
         """
         card = self.deck[random.randint(0, len(self.deck) - 1)]
         self.deck.remove(card)
