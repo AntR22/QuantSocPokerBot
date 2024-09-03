@@ -7,7 +7,7 @@ import copy
 class poker_game:
     """ 1v1 poker game
     """
-    def __init__(self, players: List[poker_player]):
+    def __init__(self, players):
         self.pot = 0
         self.deck = None
         self.players = players
@@ -19,6 +19,7 @@ class poker_game:
         self.big_blind = 40
         self.current_dealer_index = 0
         self.river = []
+        self.winner = None
     
     def play(self, num_rounds: int):
         round_num = 1
@@ -151,6 +152,14 @@ class poker_game:
             
             # move dealer to the other person
             self.current_dealer_index = int(not self.current_dealer_index)   
+            
+    def check_game_winner(self):
+        if self.stacks[0] > self.stacks[1]:
+            return 0
+        elif self.stacks[0] < self.stacks[1]:
+            return 1
+        else:
+            return None
             
 def check_winning_hand(hand1, hand2, river):
     hand1_cards = copy.deepcopy(hand1 + river) # copy hand1 cards into a single array
