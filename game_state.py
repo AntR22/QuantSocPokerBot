@@ -12,3 +12,34 @@ class game_state():
         self.big_blind = copy.deepcopy(poker_game.big_blind)
         self.current_dealer_index = copy.deepcopy(poker_game.current_dealer_index)
         self.river = copy.deepcopy(poker_game.river)
+        self.player_index = player_index
+        
+    def get_my_stack(self):
+        return self.stacks[self.player_index]
+    
+    def get_opponents_stack(self):
+        return self.stacks[int(not self.player_index)]
+    
+    def get_my_cards(self):
+        return self.cards
+    
+    def get_min_bet(self):
+        return self.min_bet
+    
+    def get_big_blind(self):
+        return self.big_blind
+    
+    def get_small_blind(self):
+        return self.small_blind
+    
+    def get_river(self):
+        return self.river
+    
+    def get_pot(self):
+        return self.pot
+    
+    def get_my_bet(self):
+        return self.bets[self.player_index]
+    
+    def get_opponents_bet(self):
+        return self.bets[int(not self.player_index)]
