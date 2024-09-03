@@ -6,8 +6,11 @@ bot1_wins = 0
 bot2_wins = 0
 num_rounds_max = 7
 
+bot1 = aggressive_bot()
+bot2 = aggressive_bot2()
+
 for i in range(0, 10):
-    game = poker_game([aggressive_bot, aggressive_bot2])
+    game = poker_game([bot1, bot2])
     game.play(num_rounds_max)
     
     winner = game.check_game_winner()

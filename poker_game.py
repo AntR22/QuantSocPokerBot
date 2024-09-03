@@ -7,7 +7,7 @@ import copy
 class poker_game:
     """ 1v1 poker game
     """
-    def __init__(self, players):
+    def __init__(self, players: List[poker_player]):
         self.pot = 0
         self.deck = None
         self.players = players
