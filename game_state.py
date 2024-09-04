@@ -43,3 +43,8 @@ class game_state():
     
     def get_opponents_bet(self):
         return self.bets[int(not self.player_index)]
+    
+    def get_current_bet(self):
+        opponent_bet = self.get_opponents_bet()
+        my_bet = self.get_my_bet()
+        return opponent_bet - my_bet if opponent_bet > my_bet else 0
