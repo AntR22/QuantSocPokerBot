@@ -1,4 +1,3 @@
-from poker_player import poker_player
 from poker_game import poker_game
 from player_bots import aggressive_bot, aggressive_bot2
 
