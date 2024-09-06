@@ -16,7 +16,7 @@ class poker_player:
         -   action: A tuple (action_type, amount)
         -   action_type: action_type is one of 'fold', 'check', 'call' or 'raise' - anything else will be treated as fold.
             If you check when the opponent has raised, you will be auto folded.
-        -   amount: amount is the bet amount if raising or calling (excluding your current bet). Set amount to 0 if folding, checking
+        -   amount: amount is the bet amount if raising (excluding your current bet). Set amount to 0 if folding, checking
             or calling. Upon raising, make sure the raise amount value is greater than minbet(unless all in) found in the gamestate 
             and not greater than your current stack. To call DO NOT put an amount, you will automatically be matched to your opponents
             bet, if you cannot match your opponents bet you will be called 'all in' (the rest of your stack), the backend will adjust
