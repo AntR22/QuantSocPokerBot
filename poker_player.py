@@ -15,11 +15,13 @@ class poker_player:
         Returns:
         -   action: A tuple (action_type, amount)
         -   action_type: action_type is one of 'fold', 'check', 'call' or 'raise' - anything else will be treated as fold.
-        -   amount: amount is the bet amount if raising or calling (excluding your current bet). Set amount to 0 if folding or checking.
-            Upon raising, make sure the raise amount value is greater than minbet(unless all in) found in the gamestate 
-            and not greater than your current stack, to call DO NOT match your opponents bet UNLESS you have enough chips to do so, 
-            otherwise you will be autofolded, just call 'all in' (the rest of your stack), the backend will adjust the opposing bet
-            to match yours. Likewise if you raise above the remaining chips the opponent has left then your bet will be curtailed.
+            If you check when the opponent has raised, you will be auto folded.
+        -   amount: amount is the bet amount if raising or calling (excluding your current bet). Set amount to 0 if folding, checking
+            or calling. Upon raising, make sure the raise amount value is greater than minbet(unless all in) found in the gamestate 
+            and not greater than your current stack. To call DO NOT put an amount, you will automatically be matched to your opponents
+            bet, if you cannot match your opponents bet you will be called 'all in' (the rest of your stack), the backend will adjust
+            the opposing bet to match yours (a shove). (No sidepots due to it being a 1v1)
+            Likewise if you raise above the remaining chips the opponent has left then your bet will be curtailed and returned to stack.
         """
         raise NotImplementedError("This method must be implemented by subclasses")
     
