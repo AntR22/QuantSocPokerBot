@@ -23,6 +23,9 @@ class poker_game:
         self.has_folded = [False, False]
     
     def do_betting_round(self, small_blind, big_blind):
+        (action1, amount1) = (None, None)
+        (action2, amount2) = (None, None)
+
         while True:
             # small blind first response
             try:
@@ -39,13 +42,35 @@ class poker_game:
                 print("player does not have enough chips for that bet! player: ", self.players[small_blind].get_name())
                 action1 = "fold"
 
-            if amount1 != 0 and (action1 == "fold" or action1 == "check"):
+            if amount1 != 0 and (action1 == "fold" or action1 == "check" or action1 == "call"):
                 print("invalid action (bet given on a fold or check) for player: ", self.players[small_blind].get_name())
                 action1 = "fold"
 
+            if action1 == "fold":
+                self.pot = self.pot + self.bets[0] + self.bets[1]
+                self.stacks[big_blind] += self.pot
+                self.bets = [0, 0]
+                self.pot = 0
+                self.has_folded[small_blind] = True
+                return False
+            elif action1 == "call":
+                pass
+            elif action1 == "raise":
+                
+                pass
 
-
-
+            if action1 == "check" and action2 == "check":
+                #sanity check
+                if self.bets[0] != self.bets[1]:
+                    #TODO treat as auto fold
+                    print("!!huge error, bets are unequal when both players have checked!!\n")
+                    exit(1)
+                self.pot += self.bets[0]
+                self.pot += self.bets[1]
+                self.bets[0] = 0
+                self.bets[1] = 0
+                return True
+                
             # dealer second response
             try:
                 (action2, amount2) = self.players[big_blind].decide_action(game_state(big_blind, self))
@@ -61,15 +86,14 @@ class poker_game:
                 print("player does not have enough chips for that bet! player: ", self.players[small_blind].get_name())
                 # TODO then auto fold
 
-            if amount2 != 0 and (action2 == "fold" or action2 == "check"):
+            if amount2 != 0 and (action2 == "fold" or action2 == "check" or action2 == "call"):
                 print("invalid action (bet given on a fold or check) for player: ", self.players[small_blind].get_name())
                 action1 = "fold"
 
-
-            
             if action1 == "check" and action2 == "check":
                 #sanity check
-                if self.bets[0] != self.bets[1]:
+                if self.bets[0] != self.bets[1]:                    
+                    #TODO treat as auto fold
                     print("!!huge error, bets are unequal when both players have checked!!\n")
                     exit(1)
                 self.pot += self.bets[0]
@@ -93,8 +117,8 @@ class poker_game:
             # update stacks and pot for small and big blind
             self.stacks[small_blind] -= self.small_blind
             self.stacks[big_blind] -= self.big_blind
-            self.pot += self.small_blind
-            self.pot += self.big_blind
+            self.bets[small_blind] += self.small_blind
+            self.bets[big_blind] += self.big_blind
             
             # deal cards
             card1 = self.deck.get_rand_card()
@@ -112,6 +136,11 @@ class poker_game:
             # Pre flop betting phase actions 
             pfresult = self.do_betting_round(small_blind, big_blind)
             
+            #sanity check
+            if self.bets[0] != 0 or self.bets[1] != 0:
+                print("error on bets at pre flop\n")
+                exit(1)
+            
             # Flop phase
             # burn card before flop
             self.deck.burn_card()
@@ -128,6 +157,11 @@ class poker_game:
             if pfresult:
                 fresult = self.do_betting_round(small_blind, big_blind)
 
+            #sanity check
+            if self.bets[0] != 0 or self.bets[1] != 0:
+                print("error on bets at pre flop\n")
+                exit(1)
+                
             # Turn phase 
             # add card to river
             self.deck.burn_card()
@@ -137,7 +171,12 @@ class poker_game:
             # turn phase betting
             if pfresult and fresult:
                 tresult = self.do_betting_round(small_blind, big_blind)
-            
+
+            #sanity check
+            if self.bets[0] != 0 or self.bets[1] != 0:
+                print("error on bets at pre flop\n")
+                exit(1)
+                
             # River phase 
             # add card to river
             self.deck.burn_card()
@@ -147,12 +186,26 @@ class poker_game:
             # river phase betting
             if pfresult and fresult and tresult:
                 rresult = self.do_betting_round(small_blind, big_blind)
+                if rresult == False:
+                    # TODO finish up
+                    pass
             
+            #sanity check
+            if self.bets[0] != 0 or self.bets[1] != 0:
+                print("error on bets at pre flop\n")
+                exit(1)
+                
             #TODO finish the round logic 
             # maybe call check_winning_hand() and fix up that function
             
-            # move dealer to the other person
+            # move dealer to the other person and reset pot + cards
             self.current_dealer_index = int(not self.current_dealer_index)   
+            self.river = []
+            self.bets = [0, 0] 
+            self.cards = [[None, None], [None, None]] 
+            self.has_folded = [False, False]
+            self.pot = 0
+            self.deck = None
             
     def check_game_winner(self):
         if self.stacks[0] > self.stacks[1]:
@@ -167,4 +220,38 @@ def check_winning_hand(hand1, hand2, river):
     hand1_cards = copy.deepcopy(hand1 + river) # copy hand1 cards into a single array
     hand2_cards = copy.deepcopy(hand2 + river) # copy hand2 cards into a single array
     
+# 9 straight flushes - ranked on high card
+# 13 four of a kinds - ranked on high card
+# 13 full houses - ignoring the pairs, must be checked in event the ranks are equal
+# 9 flushes - ranked on high card
+# 9 straights - ranked on high card
+# 13 three of a kinds - ranked on high card
+# 13 two pairs - ranked on high card
+# 13 pairs - ranked on high card
+# 13 high cards
+# total hand rankings from 1 (worst) to 105 (best)
+def check_hand(hand, river):
+    cards = copy.deepcopy(hand + river)
+            
+
+def rank_to_num(rank):
+    if rank == "A":
+        return 14
+    elif rank == "K":
+        return 13
+    elif rank == "Q":
+        return 12
+    elif rank == "J":
+        return 11
+    else:
+        return int(rank)
     
+def get_highest_card(cards):
+    highest_card = 0
+    for card in cards:
+        rank = rank_to_num(card[0])
+        if rank > highest_card:
+            highest_card = rank
+    
+    return highest_card
+        

@@ -28,10 +28,10 @@ class game_state():
     def get_min_bet(self):
         return self.min_bet
     
-    def get_big_blind(self):
+    def get_big_blind_bet(self):
         return self.big_blind
     
-    def get_small_blind(self):
+    def get_small_blind_bet(self):
         return self.small_blind
     
     def get_river(self):
