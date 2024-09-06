@@ -12,7 +12,8 @@ class poker_player:
         Must be implemented by all bots.
         
         Parameters:
-        - gamestate: 
+        - gamestate: An object containing all the necessary information about the game, check methods you
+          can use in the game_state file
         
         Returns:
         -   action: A tuple (action_type, amount)
