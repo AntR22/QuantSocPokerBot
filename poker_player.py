@@ -2,6 +2,8 @@ from game_state import game_state
 
 class poker_player:
     def __init__(self):
+        """ put your name here (in the override)
+        """
         self.name = "none"
 
     def decide_action(self, game_state: game_state): 
