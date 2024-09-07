@@ -232,7 +232,88 @@ def check_winning_hand(hand1, hand2, river):
 # total hand rankings from 1 (worst) to 105 (best)
 def check_hand(hand, river):
     cards = copy.deepcopy(hand + river)
-            
+
+    flush = False
+    straight = False
+    pair = False
+    trips = False
+    two_pair = False
+    full_house = False
+    
+    
+        
+def check_straight_flush(cards):
+    flush_cards = check_flush(cards)
+     
+def check_flush(cards):
+    suit = []
+    for i in range(0, len(cards)):
+        suit.append(cards[i][1])
+    
+    s = suit.count("s")
+    c = suit.count("c")
+    h = suit.count("h")
+    d = suit.count("d")
+    
+    ret_cards = None
+    if s >= 5:
+        ret_cards = [card for card in cards if card[1] == 's']
+    elif c >= 5:
+        ret_cards = [card for card in cards if card[1] == 'c']
+    elif h >= 5:
+        ret_cards = [card for card in cards if card[1] == 'h']
+    elif d >= 5:
+        ret_cards = [card for card in cards if card[1] == 'd']
+    return ret_cards
+    
+# returns None if no straight
+# 14 if straight from A,2,3,4,5 or 10,J,Q,K,A is present
+# Then 13 for 9,10,J,Q,K is present etc for all straights
+# essentialy returns the rank of highest straight
+def check_straight(cards):
+    ranks = []
+    Ace_present = False
+    for i in range(0, len(cards)):
+        rank = rank_to_num(cards[i][:-1])
+        if rank == 14:
+            Ace_present = True
+            ranks.append(1)
+        ranks.append(rank)
+
+    print(ranks)
+    ranks = sorted(set(ranks))
+    cur_length = 1
+    highest_in_seq = ranks[len(ranks) - 1]
+    for i in range(len(ranks) - 1, 0, -1):
+        if ranks[i] - 1 == ranks[i - 1]:
+            cur_length += 1
+        else:
+            cur_length = 1
+            highest_in_seq = ranks[i - 1]
+        
+        if cur_length == 5:
+            if Ace_present and highest_in_seq == 5:
+                return 14
+            return highest_in_seq
+    return None    
+
+def check_high_card(cards):
+    ranks = []
+    for i in range(0, len(cards)):
+        rank = rank_to_num(cards[i][:-1])
+        if rank == 14:
+            ranks.append(1)
+        ranks.append(rank)
+
+    ranks.sort()
+    print(ranks)
+    high_card = str(ranks[len(ranks) - 1])
+    for card in cards:
+        if card[:-1] == high_card:
+            return card 
+        
+    print("Error in check high card")
+    return None
 
 def rank_to_num(rank):
     if rank == "A":
@@ -249,9 +330,67 @@ def rank_to_num(rank):
 def get_highest_card(cards):
     highest_card = 0
     for card in cards:
-        rank = rank_to_num(card[0])
+        rank = rank_to_num(card[:-1])
         if rank > highest_card:
             highest_card = rank
     
     return highest_card
         
+def check_four_of_kind(cards):
+    ranks = []
+    for i in range(0, len(cards)):
+        rank = rank_to_num(cards[i][:-1])
+        ranks.append(rank)
+        
+    count = {}
+    for rank in ranks:
+        if rank in count:
+            count[rank] += 1
+        else:
+            count[rank] = 1
+    
+    for key, value in count.items():
+        if value == 4:
+            return key
+    
+    return None
+
+# returns list of all pairs
+def check_pairs(cards):
+    ranks = []
+    for i in range(0, len(cards)):
+        rank = rank_to_num(cards[i][:-1])
+        ranks.append(rank)
+        
+    count = {}
+    for rank in ranks:
+        if rank in count:
+            count[rank] += 1
+        else:
+            count[rank] = 1
+    
+    pairs = []
+    for key, value in count.items():
+        if value == 2:
+            pairs.append(key)
+    
+    return pairs
+
+def check_trips(cards):
+    ranks = []
+    for i in range(0, len(cards)):
+        rank = rank_to_num(cards[i][:-1])
+        ranks.append(rank)
+        
+    count = {}
+    for rank in ranks:
+        if rank in count:
+            count[rank] += 1
+        else:
+            count[rank] = 1
+    
+    for key, value in count.items():
+        if value == 3:
+            return key
+    
+    return None
