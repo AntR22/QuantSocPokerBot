@@ -1,6 +1,6 @@
 from poker_game import poker_game
 from player_bots import aggressive_bot, aggressive_bot2
-
+from poker_deck import poker_deck
 bot1_wins = 0
 bot2_wins = 0
 num_rounds_max = 7
@@ -23,3 +23,10 @@ for i in range(0, 10):
         print("bot2 wins wins this round")
         
     print(f"Current score:\n bot1 = {bot1_wins}\n bot2 = {bot2_wins}")
+
+if bot1_wins > bot2_wins: 
+    winner = bot1.get_name() 
+else: 
+    winner = bot2.get_name()
+
+print("\n\n||| WINNER |||\n  ", winner)

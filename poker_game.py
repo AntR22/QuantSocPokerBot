@@ -220,31 +220,60 @@ def check_winning_hand(hand1, hand2, river):
     hand1_cards = copy.deepcopy(hand1 + river) # copy hand1 cards into a single array
     hand2_cards = copy.deepcopy(hand2 + river) # copy hand2 cards into a single array
     
-# 9 straight flushes - ranked on high card
-# 13 four of a kinds - ranked on high card
-# 13 full houses - ignoring the pairs, must be checked in event the ranks are equal
-# 9 flushes - ranked on high card
-# 9 straights - ranked on high card
-# 13 three of a kinds - ranked on high card
-# 13 two pairs - ranked on high card
-# 13 pairs - ranked on high card
-# 13 high cards
-# total hand rankings from 1 (worst) to 105 (best)
+# 9 straight flushes - ranked on high card - 96 to 104
+# 13 four of a kinds - ranked on high card - 83 to 95 
+# 13 full houses - ignoring the pairs, must be checked in event the ranks are equal - 70 to 82
+# 9 flushes - ranked on high card - 61 to 69
+# 9 straights - ranked on high card - 52 to 60 
+# 13 three of a kinds - ranked on high card - 39 to 51
+# 13 two pairs - ranked on high card - 26 to 38
+# 13 pairs - ranked on high card - 13 to 25
+# 13 high cards - 1 to 13
+# total hand rankings from 1 (worst) to 104 (best)
+# returns -> (rank: int, info: type depends on rank)
 def check_hand(hand, river):
     cards = copy.deepcopy(hand + river)
-
-    flush = False
-    straight = False
-    pair = False
-    trips = False
-    two_pair = False
-    full_house = False
+    sfH = check_straight_flush(cards)
+    if sfH:
+        return (90 + sfH, sfH)
     
+    foKH = check_four_of_kind(cards)
+    if foKH:
+        return (81 + foKH, foKH)
     
-        
+    fH = check_full_house(cards)
+    if fH:
+        return (68 + fH, fH)
+    
+    fL = check_flush(cards)
+    if fL:
+        return (55 + get_highest_card(fL), fL)
+    
+    sT = check_straight(cards)
+    if sT:
+        return (46 + sT, sT)
+    
+    trips = check_trips(cards)
+    if trips:
+        return (37 + max(trips), trips)
+    
+    pairs = check_pairs(cards)
+    if len(pairs) >= 2:
+        return (24 + max(pairs), pairs)
+    
+    if len(pairs) == 1:
+        return (11 + max(pairs), pairs)
+    
+    hC = get_highest_card(cards)
+    return -1 + hC
+    
 def check_straight_flush(cards):
     flush_cards = check_flush(cards)
-     
+    if flush_cards == None:
+        return None
+    straight_flush = check_straight(flush_cards)
+    return straight_flush
+    
 def check_flush(cards):
     suit = []
     for i in range(0, len(cards)):
@@ -280,7 +309,6 @@ def check_straight(cards):
             ranks.append(1)
         ranks.append(rank)
 
-    print(ranks)
     ranks = sorted(set(ranks))
     cur_length = 1
     highest_in_seq = ranks[len(ranks) - 1]
@@ -296,6 +324,9 @@ def check_straight(cards):
                 return 14
             return highest_in_seq
     return None    
+
+def check_full_house(cards):
+    return 0
 
 def check_high_card(cards):
     ranks = []
@@ -327,6 +358,18 @@ def rank_to_num(rank):
     else:
         return int(rank)
     
+def num_to_rank(num):
+    if num == 14:
+        return "A"
+    elif num == 13:
+        return "K"
+    elif num == 12:
+        return "Q"
+    elif num == 11:
+        return "J"
+    else:
+        return str(num)
+ 
 def get_highest_card(cards):
     highest_card = 0
     for card in cards:
@@ -376,7 +419,9 @@ def check_pairs(cards):
     
     return pairs
 
+# returns list of all trips (in unlikely event there are two)
 def check_trips(cards):
+    ranks = []
     ranks = []
     for i in range(0, len(cards)):
         rank = rank_to_num(cards[i][:-1])
@@ -389,8 +434,9 @@ def check_trips(cards):
         else:
             count[rank] = 1
     
+    trips = []
     for key, value in count.items():
         if value == 3:
-            return key
+            trips.append(key)
     
-    return None
+    return trips
