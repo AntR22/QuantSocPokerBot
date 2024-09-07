@@ -28,4 +28,4 @@ class example_bot(poker_player):
         :return: True if the bot has a pair, False otherwise.
         """
         # Check if the two hole cards have the same rank (pair)
-        return cards[0] == cards[1]
+        return cards[0][:-1] == cards[1][:-1]
