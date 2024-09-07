@@ -1,8 +1,10 @@
-from poker_game import poker_game
 import copy
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from poker_game import poker_game  # Import only for type checking
 
 class game_state():
-    def __init__(self, player_index: int, poker_game: poker_game):
+    def __init__(self, player_index: int, poker_game: 'poker_game'):
         self.pot = copy.deepcopy(poker_game.pot)
         self.stacks = copy.deepcopy(poker_game.stacks)
         self.bets = copy.deepcopy(poker_game.bets)
@@ -26,10 +28,10 @@ class game_state():
     def get_min_bet(self):
         return self.min_bet
     
-    def get_big_blind(self):
+    def get_big_blind_bet(self):
         return self.big_blind
     
-    def get_small_blind(self):
+    def get_small_blind_bet(self):
         return self.small_blind
     
     def get_river(self):
