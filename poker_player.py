@@ -14,7 +14,21 @@ class poker_player:
         Parameters:
         - gamestate: An object containing all the necessary information about the game, check methods you
           can use in the game_state file
-        
+          Inside game_state, you can use any of the methods to retrieve information needed, or access the parameters directly.
+          Changing these parameters will do nothing as all are deep copies so feel free to mess around with card ordering etc.
+          Cards will be an array of strings, with representation of first char rank, second char suit e.g. a river of
+            - Ace of spades = "As"
+            - King of clubs = "Kc"
+            - Queen of hearts = "Qh"
+            - Jack of clubs = "Jc"
+            - 10 of diamonds = "10d"
+            Would be given as ["As", "Kc", "Qh", "Jc", "10d"] 
+            - if only 3 cards are on the river then ["As", "Kc", "Qh"]
+            - if only 4 cards are on the river then ["As", "Kc", "Qh", "Jc"]
+            A hand of
+            - 3 of clubs = "3c"
+            - 5 of diamonds = "5d"
+            Would be given as ["3c", "5d"]
         Returns:
         -   action: A tuple (action_type, amount)
         -   action_type: action_type is one of 'fold', 'check', 'call' or 'raise' - anything else will be treated as fold.
