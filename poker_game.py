@@ -220,6 +220,17 @@ def check_winning_hand(hand1, hand2, river):
     hand1_cards = copy.deepcopy(hand1 + river) # copy hand1 cards into a single array
     hand2_cards = copy.deepcopy(hand2 + river) # copy hand2 cards into a single array
     
+    hand1_res = check_hand(hand1_cards, river)
+    hand2_res = check_hand(hand2_cards, river)
+    
+    if hand1_res[0] > hand2_res[0]:
+        return 1
+    elif hand1_res[0] < hand2_res[0]:
+        return 2
+    else:
+        #TODO handle cases theyre the same rank 
+        pass
+    
 # 9 straight flushes - ranked on high card - 96 to 104
 # 13 four of a kinds - ranked on high card - 83 to 95 
 # 13 full houses - ignoring the pairs, must be checked in event the ranks are equal - 70 to 82
@@ -265,7 +276,7 @@ def check_hand(hand, river):
         return (11 + max(pairs), pairs)
     
     hC = get_highest_card(cards)
-    return -1 + hC
+    return (-1 + hC, hC)
     
 def check_straight_flush(cards):
     flush_cards = check_flush(cards)
