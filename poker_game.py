@@ -199,10 +199,10 @@ class poker_game:
             if not self.has_folded[0] and not self.has_folded[1]:
                 # Both players have not folded so determine based on hand
                 winner = check_winning_hand(self.cards[0], self.cards[1], self.river)
-                if winner == 1:
+                if winner == 0:
                     print(f"Player 1 wins the hand with {self.cards[0]}")
                     self.stacks[0] += self.pot
-                elif winner == 2:
+                elif winner == 1:
                     print(f"Player 2 wins the hand with {self.cards[1]}")
                     self.stacks[1] += self.pot
                 else:
