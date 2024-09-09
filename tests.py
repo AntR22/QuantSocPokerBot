@@ -12,8 +12,8 @@ print("pairs: ", check_pairs(straight))
 print("trips: ", check_trips(straight))
 print("hand eval: ", check_hand(straight[0:2], straight[2:5]))
 
-print("\n\n|||||| test 2 for pair ||||||")
-straight = ["Ad", "3d", "3d", "4d", "5d", "7c"]
+print("\n\n|||||| test 2 for flush||||||")
+straight = ["Ad", "3d", "3d", "4d", "5d", "7d"]
 print(straight)
 print("highest card:", get_highest_card(straight))
 print("straight: ", check_straight(straight))
@@ -60,7 +60,7 @@ print("straight flush: ", check_straight_flush(flush_hand))  # Should return Fal
 print("4 of kind: ", check_four_of_kind(flush_hand))  # Should return False (no four of a kind)
 print("pairs: ", check_pairs(flush_hand))             # Should return 0 (no pairs)
 print("trips: ", check_trips(flush_hand))             # Should return False (no three of a kind)
-print("hand eval: ", check_hand(straight[0:2], straight[2:5]))
+print("hand eval: ", check_hand(flush_hand[0:2], flush_hand[2:5]))
 
 print("\n\n|||||| test 6 for 4ofaK ||||||")
 # Test 6: Four of a kind - 4 Aces
@@ -73,7 +73,7 @@ print("straight flush: ", check_straight_flush(four_of_kind))  # Should return F
 print("4 of kind: ", check_four_of_kind(four_of_kind))  # Should return True (four Aces)
 print("pairs: ", check_pairs(four_of_kind))             # Should return 0 (no pairs, just four of a kind)
 print("trips: ", check_trips(four_of_kind))             # Should return False (four of a kind, not trips)
-print("hand eval: ", check_hand(straight[0:2], straight[2:5]))
+print("hand eval: ", check_hand(four_of_kind[0:2], four_of_kind[2:5]))
 
 print("\n\n|||||| test 7 for two pairs ||||||")
 # Test 7: Two Pairs - Kings and 7s
@@ -86,7 +86,7 @@ print("straight flush: ", check_straight_flush(two_pairs))  # Should return Fals
 print("4 of kind: ", check_four_of_kind(two_pairs))     # Should return False (no four of a kind)
 print("pairs: ", check_pairs(two_pairs))                # Should return 2 (two pairs: Kings and 7s)
 print("trips: ", check_trips(two_pairs))                # Should return False (no three of a kind)
-print("hand eval: ", check_hand(straight[0:2], straight[2:5]))
+print("hand eval: ", check_hand(two_pairs[0:2], two_pairs[2:5]))
 
 print("\n\n|||||| test 8 for trips ||||||")
 # Test 8: Three of a kind - Three Queens
@@ -99,6 +99,70 @@ print("straight flush: ", check_straight_flush(three_of_kind))  # Should return 
 print("4 of kind: ", check_four_of_kind(three_of_kind))  # Should return False (no four of a kind)
 print("pairs: ", check_pairs(three_of_kind))             # Should return 0 (no pairs, just trips)
 print("trips: ", check_trips(three_of_kind))             # Should return True (three Queens)
-print("hand eval: ", check_hand(straight[0:2], straight[2:5]))
+print("hand eval: ", check_hand(three_of_kind[0:2], three_of_kind[2:5]))
+
+print("\n\n|||||| test 9 for full house ||||||")
+# Test 9: Full house (Three Queens and two Kings)
+full_house = ["Qc", "Kh", "Qd", "Qh", "Kd", "7s", "2c"]
+print(full_house)
+print("highest card:", get_highest_card(full_house))  # Should return Queen or King depending on eval function
+print("straight: ", check_straight(full_house))       # Should return False (no straight)
+print("flush: ", check_flush(full_house))             # Should return False (different suits)
+print("straight flush: ", check_straight_flush(full_house))  # Should return False (different suits)
+print("4 of kind: ", check_four_of_kind(full_house))  # Should return False (no four of a kind)
+print("pairs: ", check_pairs(full_house))             # Should return 1 (full house counts as pairs)
+print("trips: ", check_trips(full_house))             # Should return True (three Queens)
+print("hand eval: ", check_hand(full_house[0:2], full_house[2:5]))
+
+print("\n\n|||||| test 10 for none ||||||")
+# Test 10: All low cards (no hand)
+low_cards = ["2c", "3s", "5d", "6h", "9c", "7d", "4s"]
+print(low_cards)
+print("highest card:", get_highest_card(low_cards))    # Should return 9 (highest card)
+print("straight: ", check_straight(low_cards))         # Should return False (no straight)
+print("flush: ", check_flush(low_cards))               # Should return False (different suits)
+print("straight flush: ", check_straight_flush(low_cards))  # Should return False (different suits)
+print("4 of kind: ", check_four_of_kind(low_cards))    # Should return False (no four of a kind)
+print("pairs: ", check_pairs(low_cards))               # Should return 0 (no pairs)
+print("trips: ", check_trips(low_cards))               # Should return False (no three of a kind)
+print("hand eval: ", check_hand(low_cards[0:2], low_cards[2:5]))
+
+print("\n\n|||||| test 11 for pair||||||")
+# Test 11: One pair (Two 6s)
+one_pair = ["6c", "6s", "3d", "4h", "9c", "7d", "5s"]
+print(one_pair)
+print("highest card:", get_highest_card(one_pair))     # Should return 9 (highest card)
+print("straight: ", check_straight(one_pair))          # Should return False (no straight)
+print("flush: ", check_flush(one_pair))                # Should return False (different suits)
+print("straight flush: ", check_straight_flush(one_pair))  # Should return False (different suits)
+print("4 of kind: ", check_four_of_kind(one_pair))     # Should return False (no four of a kind)
+print("pairs: ", check_pairs(one_pair))                # Should return 1 (one pair of 6s)
+print("trips: ", check_trips(one_pair))                # Should return False (no three of a kind)
+print("hand eval: ", check_hand(one_pair[0:2], one_pair[2:5]))
+
+print("\n\n|||||| test 12 for flush ||||||")
+# Test 12: All same suit, but no straight (Flush)
+flush_but_no_straight = ["2d", "4d", "6d", "8d", "Jd", "7d", "3s"]
+print(flush_but_no_straight)
+print("highest card:", get_highest_card(flush_but_no_straight))  # Should return Jack (Jd is high)
+print("straight: ", check_straight(flush_but_no_straight))       # Should return False (no straight)
+print("flush: ", check_flush(flush_but_no_straight))             # Should return True (all diamonds)
+print("straight flush: ", check_straight_flush(flush_but_no_straight))  # Should return False (not a straight)
+print("4 of kind: ", check_four_of_kind(flush_but_no_straight))  # Should return False (no four of a kind)
+print("pairs: ", check_pairs(flush_but_no_straight))             # Should return 0 (no pairs)
+print("trips: ", check_trips(flush_but_no_straight))             # Should return False (no three of a kind)
+print("hand eval: ", check_hand(flush_but_no_straight[0:2], flush_but_no_straight[2:5]))
+
+print("\n\n|||||| test 13 for full house ||||||")
+# Test 13: Full house with low cards (2s and 3s)
+full_house_low = ["2c", "2d", "2h", "3s", "3d", "7s", "8h"]
+print("highest card:", get_highest_card(full_house_low))  # Should return 8 (highest card)
+print("straight: ", check_straight(full_house_low))       # Should return False (no straight)
+print("flush: ", check_flush(full_house_low))             # Should return False (different suits)
+print("straight flush: ", check_straight_flush(full_house_low))  # Should return False (no straight)
+print("4 of kind: ", check_four_of_kind(full_house_low))  # Should return False (no four of a kind)
+print("pairs: ", check_pairs(full_house_low))             # Should return 1 (full house counts as pairs)
+print("trips: ", check_trips(full_house_low))             # Should return True (three 2s)
+print("hand eval: ", check_hand(full_house_low[0:2], full_house_low[2:5]))
 
 exit(0)

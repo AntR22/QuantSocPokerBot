@@ -215,25 +215,64 @@ class poker_game:
         else:
             return None
 
-
-def check_winning_hand(hand1, hand2, river):
-    hand1_cards = copy.deepcopy(hand1 + river) # copy hand1 cards into a single array
-    hand2_cards = copy.deepcopy(hand2 + river) # copy hand2 cards into a single array
+# return 0 if hand0 is the winning hand
+# return 1 if hand1 is the winning hand
+# return -1 if equal or some sort of error occured
+def check_winning_hand(hand0, hand1, river):
+    hand0_cards = copy.deepcopy(hand0 + river) # copy hand1 cards into a single array
+    hand1_cards = copy.deepcopy(hand1 + river) # copy hand2 cards into a single array
     
+    hand0_res = check_hand(hand0_cards, river)
     hand1_res = check_hand(hand1_cards, river)
-    hand2_res = check_hand(hand2_cards, river)
     
-    if hand1_res[0] > hand2_res[0]:
+    if hand0_res[0] > hand1_res[0]:
+        return 0
+    elif hand0_res[0] < hand1_res[0]:
         return 1
-    elif hand1_res[0] < hand2_res[0]:
-        return 2
     else:
-        #TODO handle cases theyre the same rank 
-        pass
+        hand_val = hand1_res[0]
+        if hand_val >= 39 and hand_val <= 51:
+            # check higher 3 pair in event theres two with first one even
+            hand0_second_trip = hand0_res[1]
+            hand1_second_trip = hand1_res[1]
+            if hand0_second_trip > hand1_second_trip: # type: ignore
+                return 0
+            elif hand0_second_trip < hand1_second_trip: # type: ignore
+                return 1
+            else: 
+                return -1
+        elif hand_val >= 26 and hand_val <= 38:
+            # check higher two pair in event one is even
+            hand0_second_pair = hand0_res[1]
+            hand1_second_pair = hand1_res[1]
+            if hand0_second_pair > hand1_second_pair: # type: ignore
+                return 0
+            elif hand0_second_pair < hand1_second_pair: # type: ignore
+                return 1
+            else: 
+                return -1
+        elif hand_val >= 13 and hand_val <= 25:
+            # check who has the better rest of hand
+            p0_card1_rank = rank_to_num(hand0[0][:-1])
+            p0_card2_rank = rank_to_num(hand0[1][:-1])
+            p1_card1_rank = rank_to_num(hand1[0][:-1])
+            p1_card2_rank = rank_to_num(hand1[1][:-1])
+            if min(p0_card1_rank, p0_card2_rank) > min(p1_card1_rank, p1_card2_rank):
+                return 0
+            elif min(p0_card1_rank, p0_card2_rank) < min(p1_card1_rank, p1_card2_rank):
+               return 1
+
+            if max(p0_card1_rank, p0_card2_rank) > max(p1_card1_rank, p1_card2_rank):
+                return 0
+            elif max(p0_card1_rank, p0_card2_rank) < max(p1_card1_rank, p1_card2_rank):
+                return 1
+        
+        # theyre equal hands
+        return -1
     
 # 9 straight flushes - ranked on high card - 96 to 104
 # 13 four of a kinds - ranked on high card - 83 to 95 
-# 13 full houses - ignoring the pairs, must be checked in event the ranks are equal - 70 to 82
+# 13 full houses - ignoring the pairs, as trips are unique  - 70 to 82
 # 9 flushes - ranked on high card - 61 to 69
 # 9 straights - ranked on high card - 52 to 60 
 # 13 three of a kinds - ranked on high card - 39 to 51
@@ -254,26 +293,30 @@ def check_hand(hand, river):
     
     fH = check_full_house(cards)
     if fH:
-        return (68 + fH, fH)
+        hcFH = fH[0]
+        return (68 + hcFH, fH)
     
     fL = check_flush(cards)
     if fL:
         return (55 + get_highest_card(fL), fL)
     
     sT = check_straight(cards)
+
     if sT:
         return (46 + sT, sT)
     
     trips = check_trips(cards)
     if trips:
-        return (37 + max(trips), trips)
+        # also return the min trip for later checking
+        return (37 + max(trips), min(trips))
     
     pairs = check_pairs(cards)
     if len(pairs) >= 2:
-        return (24 + max(pairs), pairs)
+        # also return the min pair for later checking
+        return (24 + max(pairs), min(pairs))
     
     if len(pairs) == 1:
-        return (11 + max(pairs), pairs)
+        return (11 + max(pairs), pairs[0])
     
     hC = get_highest_card(cards)
     return (-1 + hC, hC)
@@ -288,7 +331,7 @@ def check_straight_flush(cards):
 def check_flush(cards):
     suit = []
     for i in range(0, len(cards)):
-        suit.append(cards[i][1])
+        suit.append(cards[i][-1])
     
     s = suit.count("s")
     c = suit.count("c")
@@ -297,13 +340,13 @@ def check_flush(cards):
     
     ret_cards = None
     if s >= 5:
-        ret_cards = [card for card in cards if card[1] == 's']
+        ret_cards = [card for card in cards if card[-1] == 's']
     elif c >= 5:
-        ret_cards = [card for card in cards if card[1] == 'c']
+        ret_cards = [card for card in cards if card[-1] == 'c']
     elif h >= 5:
-        ret_cards = [card for card in cards if card[1] == 'h']
+        ret_cards = [card for card in cards if card[-1] == 'h']
     elif d >= 5:
-        ret_cards = [card for card in cards if card[1] == 'd']
+        ret_cards = [card for card in cards if card[-1] == 'd']
     return ret_cards
     
 # returns None if no straight
@@ -337,7 +380,27 @@ def check_straight(cards):
     return None    
 
 def check_full_house(cards):
-    return 0
+    ranks = []
+    for i in range(0, len(cards)):
+        rank = rank_to_num(cards[i][:-1])
+        ranks.append(rank)
+        
+    count = {}
+    for rank in ranks:
+        if rank in count:
+            count[rank] += 1
+        else:
+            count[rank] = 1
+    
+    count = dict(sorted(count.items(), key=lambda item: item[1], reverse=True))
+    full_house = []
+    for key, value in count.items():
+        if value == 3:
+            full_house.append(key)
+        elif value == 2:
+            full_house.append(key)
+
+    return full_house
 
 def check_high_card(cards):
     ranks = []
@@ -428,11 +491,14 @@ def check_pairs(cards):
         if value == 2:
             pairs.append(key)
     
+    # remove lowest pair as cannot be a 3 pair
+    if len(pairs) == 3:
+        pairs.remove(min(pairs))
+        
     return pairs
 
 # returns list of all trips (in unlikely event there are two)
 def check_trips(cards):
-    ranks = []
     ranks = []
     for i in range(0, len(cards)):
         rank = rank_to_num(cards[i][:-1])
