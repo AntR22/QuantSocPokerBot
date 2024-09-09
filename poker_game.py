@@ -195,9 +195,28 @@ class poker_game:
                 print("error on bets at pre flop\n")
                 exit(1)
                 
-            #TODO finish the round logic 
-            # maybe call check_winning_hand() and fix up that function
-            
+            # Determine if any players have folded
+            if not self.has_folded[0] and not self.has_folded[1]:
+                # Both players have not folded so determine based on hand
+                winner = check_winning_hand(self.cards[0], self.cards[1], self.river)
+                if winner == 0:
+                    print(f"Player 1 wins the hand with {self.cards[0]}")
+                    self.stacks[0] += self.pot
+                elif winner == 1:
+                    print(f"Player 2 wins the hand with {self.cards[1]}")
+                    self.stacks[1] += self.pot
+                else:
+                    print("It's a tie!")
+                    self.stacks[0] += self.pot // 2
+                    self.stacks[1] += self.pot // 2
+            else:
+                if self.has_folded[0]:
+                    print("Player 2 wins by fold")
+                    self.stacks[1] += self.pot
+                elif self.has_folded[1]:
+                    print("Player 1 wins by fold")
+                    self.stacks[0] += self.pot
+
             # move dealer to the other person and reset pot + cards
             self.current_dealer_index = int(not self.current_dealer_index)   
             self.river = []
