@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0f1d2b;
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.landing-page {
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.landing-header {
+    background-color: #0e7e68;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.landing-header h1 {
+    font-size: 2.5rem;
+    color: white;
+}
+
+.countdown {
+    margin: 2rem 0;
+}
+
+.countdown h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #0e7e68;
+}
+
+.countdown-timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.countdown-item {
+    text-align: center;
+    background-color: #1c2e40;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 2px solid #0e7e68;
+    width: 80px;
+}
+
+.countdown-number {
+    font-size: 2.5rem;
+    color: white;
+    display: block;
+}
+
+.countdown-label {
+    font-size: 1.2rem;
+    color: white;
+}
+
+.landing-buttons {
+    margin-top: 2rem;
+    margin-bottom: 3rem; /* Add extra space between buttons and footer */
+}
+
+.cta-btn {
+    background-color: #0e7e68;
+    color: white;
+    padding: 0.75rem 2rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 1rem;
+    transition: background-color 0.3s;
+}
+
+.cta-btn:hover {
+    background-color: #0c6a58;
+}
+
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #1c2e40;
+    color: white;
+}

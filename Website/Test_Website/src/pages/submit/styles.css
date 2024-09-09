@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0f1d2b;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+header {
+    background-color: #0e7e68;
+    padding: 1rem;
+    text-align: center;
+    border-radius: 8px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: white;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.submission-form {
+    background-color: #1c2e40;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 2rem;
+}
+
+.submission-form h2 {
+    font-size: 2rem;
+    color: #0e7e68;
+    margin-bottom: 1rem;
+}
+
+.submission-form p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+    width: 100%;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 2px solid #0e7e68;
+    border-radius: 5px;
+    background-color: #2d3e50;
+    color: white;
+    outline: none;
+}
+
+.form-group input::placeholder, .form-group textarea::placeholder {
+    color: #7f8c8d;
+}
+
+.form-group input:focus, .form-group textarea:focus {
+    border-color: #0e7e68;
+    background-color: #32425a;
+}
+
+.submit-btn {
+    background-color: #4fbba5;
+    color: white;
+    padding: 0.75rem 2rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #0c6a58;
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    background-color: #1c2e40;
+    color: white;
+    width: 100%;
+}
+
+footer p {
+    font-size: 1rem;
+}
